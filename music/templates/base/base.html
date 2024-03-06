@@ -45,10 +45,20 @@
 
         <!-- Welcome User -->
         <div class="sidebar-section">
-            <span style="margin-left: 14px;" class="sidebar-link-icon">👤</span>
-            <b>Welcome, {{user.username}}</b>
-            <br>
-            <br>
+            {% if request.user.artist %}
+            <a href="{% url 'profile' user.artist.id %}">
+                <span style="margin-left: 14px;" class="sidebar-link-icon">👤</span>
+                <b>Welcome, {{user.username}}</b>
+            </a>
+            <a href="{% url 'create_album' %}" class="btn btn-success">
+                <span style="margin-left: 14px;" class="sidebar-link-icon">👤</span>
+                <b>Add Album</b>
+            </a>
+            {% else %}
+                <span style="margin-left: 14px;" class="sidebar-link-icon">👤</span>
+                <b>Welcome, {{user.username}}</b>
+            {% endif %}
+
 
             <a href="/logout">
                 <span class="sidebar-link-icon">↪️</span>

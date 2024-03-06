@@ -4,16 +4,25 @@ from django.contrib.auth.models import User
 
 
 class Artist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     artistName = models.CharField(_("Artist Name"), max_length=50)
     created = models.DateTimeField(_("Artist created date"), auto_now_add=True)
     last_updated = models.DateTimeField(_("Latest artist update"), auto_now=True)
-
+    verificated = models.BooleanField(default=False)
     class Meta:
         verbose_name = _("Artist")
         verbose_name_plural = _("Artists")
 
     def __str__(self):
         return self.artistName
+
+    def total_likes(self):
+        return sum(song.liked_by.count() for album in self.album_set.all() for song in album.song_set.all())
+
+    def add_song(self, song):
+        # Add a song to the album
+        song.album = self
+        song.save()
 
 
 class Album(models.Model):

@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+
+{% block title %}Your profile {% endblock title %}
+
+
+{% block content %}
+
+<main style="padding-top:20px; width: 1100px;">
+            <section style=" margin-top:0px; padding:0px;  white-space:nowrap;">
+
+
+    <!-- Artist Header -->
+    <div class="relative">
+      <!-- Increased height with inline style -->
+      <img src="{% static '/images/profile.webp' %}"  style="width: 100px; height: 100px; padding: 20px; box-sizing: border-box;">
+      <div class="absolute bottom-0 p-5 w-full" style="background: rgba(0, 0, 0, 0.5);">
+        <div class="flex items-center">
+          <span class="text-sm text-gray-300 ml-1">{% if artist.verificated %}Verified Artist {% else %} Not Verified{% endif %}</span>
+        </div>
+        <h1 class="text-5xl font-bold text-white mt-2">{{artist.artistName}}</h1>
+        <p class="text-gray-300">{{total_likes}} Likes</p>
+      </div>
+    </div>
+
+
+    <!-- Popular Tracks Section -->
+    <div class="p-5">
+      <h2 class="text-2xl font-bold mb-4">Albums</h2>
+      <div class="divide-y divide-gray-800">
+        <!-- Single Track Row -->
+        {% for album in albums %}
+
+        <div class="category-card">
+                <div style="text-decoration: none; color: white;">
+                    <img src="{% static '/images/album.png' %}" class="img-fluid rounded-start">
+                    <div class="category-title">
+
+                    </div><a href="{% url 'album_profile' album_id=album.id %}">
+                        {{album.albumName}}
+                      </a>
+                </div>
+            </div>
+        {% endfor %}
+        <!-- Repeat for other tracks -->
+      </div>
+      <!-- <a href="#" class="text-green-500 text-sm">See more</a> -->
+    </div>
+
+            </section>
+</main>
+{% endblock content %}

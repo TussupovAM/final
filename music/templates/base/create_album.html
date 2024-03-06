@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<main style="padding-top:20px; width: 1100px;">
+      <section style=" margin-top:0px; padding:0px;  white-space:nowrap;">
+
+        <div class="browse-all ">
+            <h2>Create Album</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Create Album</button>
+            </form>
+        </div>
+      </section>
+
+</main>
+
+{% endblock content %}
+
+

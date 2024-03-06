@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<main style="padding-top:20px; width: 1100px;">
+            <section style=" margin-top:0px; padding:0px;  white-space:nowrap;">
+
+      <div class="browse-all ">
+          <h2>{{ album.albumName }} Songs</h2>
+          <a href="{% url 'add_song_to_album' album_id=album.id %}">Add Song</a>
+
+        {% for song in songs %}
+            <div class="category-card">
+                <div style="text-decoration: none; color: white;">
+                    <img src="{{song.songThumbnail.url}}" class="img-fluid rounded-start">
+                    <div class="category-title">{{song.songName}}
+                        <p id="like-status">Likes: {{ song.liked_by.all|length }}</p>
+                    </div>
+                </div>
+                <audio controls>
+                    <source src="{{song.song.url}}" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                </audio>
+            </div>
+        {% endfor %}
+      </div>
+
+            </section>
+
+</main>
+
+{% endblock content %}
+
+

@@ -7,10 +7,42 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
-
 from .models import Song, Album, Artist
+from .forms import AlbumForm, SongForm
 
+def create_album(request):
+    if request.method == 'POST':
+        form = AlbumForm(request.POST)
+        if form.is_valid():
+            album = form.save(commit=False)
+            album.artist = request.user.artist
+            album.save()
+            return redirect('profile', artist_id=request.user.artist.id)
+    else:
+        form = AlbumForm()
 
+    return render(request, 'base/create_album.html', {'form': form})
+
+def album_profile(request, album_id):
+    album = get_object_or_404(Album, pk=album_id)
+    songs = album.song_set.all()
+
+    return render(request, 'base/album_profile.html', {'album': album, 'songs': songs})
+
+def add_song_to_album(request, album_id):
+    album = get_object_or_404(Album, pk=album_id, artist=request.user.artist)
+
+    if request.method == 'POST':
+        form = SongForm(request.POST, request.FILES)
+        if form.is_valid():
+            song = form.save(commit=False)
+            song.album = album
+            song.save()
+            return redirect('album_profile', album_id=album.id)
+    else:
+        form = SongForm()
+
+    return render(request, 'base/add_song_to_album.html', {'form': form, 'album': album})
 @login_required(login_url='login')
 def logout(request):
     auth.logout(request)
@@ -107,3 +139,11 @@ def liked_songs(request):
     liked_songs = Song.objects.filter(liked_by=request.user)
 
     return render(request, 'base/liked_songs.html', {'liked_songs': liked_songs})
+
+
+def artist_profile(request, artist_id):
+    artist = get_object_or_404(Artist, pk=artist_id)
+    albums = Album.objects.filter(artist=artist)
+    total_likes = artist.total_likes()
+
+    return render(request, 'base/artist_profile.html', {'artist': artist, 'albums': albums, 'total_likes': total_likes})
