@@ -96,9 +96,14 @@ def like_song(request, song_id):
 
     if request.user in song.liked_by.all():
         song.liked_by.remove(request.user)
-        liked = False
     else:
         song.liked_by.add(request.user)
-        liked = True
 
-    return JsonResponse({'liked': liked})
+    return redirect('/')
+
+@login_required
+def liked_songs(request):
+    # Get the songs liked by the current user
+    liked_songs = Song.objects.filter(liked_by=request.user)
+
+    return render(request, 'base/liked_songs.html', {'liked_songs': liked_songs})

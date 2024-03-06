@@ -1,11 +1,17 @@
 {% extends 'base/base.html' %}
 
+
+{% block title %}Your liked songs {% endblock title %}
+
+
 {% block content %}
+
+        {% if liked_songs %}
 <main style="padding-top:20px; width: 1100px;">
             <section style=" margin-top:0px; padding:0px;  white-space:nowrap;">
 
       <div class="browse-all ">
-        {% for song in allSongs %}
+        {% for song in liked_songs %}
             <div class="category-card">
                 <div style="text-decoration: none; color: white;">
                     <img src="{{song.songThumbnail.url}}" class="img-fluid rounded-start">
@@ -30,7 +36,9 @@
             </section>
 
 </main>
+{% else %}
+<h1>No songs liked </h1>
+{% endif %}
 
 {% endblock content %}
-
 

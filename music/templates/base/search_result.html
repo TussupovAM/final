@@ -7,25 +7,35 @@
 {% block content %}
 
         {% if search_result %}
-        <div class="container mt-3">
-                <div class="search-header">
-                        <br>
-                        <h3 style="text-align: center;" >Search Results For {{search_query}}</h3>
-                        <br>
+<main style="padding-top:20px; width: 1100px;">
+            <section style=" margin-top:0px; padding:0px;  white-space:nowrap;">
+
+      <div class="browse-all ">
+        {% for song in search_result %}
+            <div class="category-card">
+                <div style="text-decoration: none; color: white;">
+                    <img src="{{song.songThumbnail.url}}" class="img-fluid rounded-start">
+                    <div class="category-title">{{song.songName}}
+                        <p id="like-status">Likes: {{ song.liked_by.all|length }}</p>
+                        <form method="post" action="{% url 'like_song' song.id %}">
+            {% csrf_token %}
+                        <button type="submit" id="like-button" {% if user in song.liked_by.all %}class="liked"{% endif %}>
+                            {% if user in song.liked_by.all %}Unlike{% else %}Like{% endif %}
+                        </button>
+                        </form>
+                    </div>
                 </div>
-                {% for song in search_result %}
-                <div class="category-card">
-                        <a style="text-decoration: none; color: white;" href="/music/{{track.id}}">
-                           <img src="{{song.songThumbnail.url}}" class="img-fluid rounded-start" alt="{{song.songName}}">
-                           <div class="category-title">{{song.songName}}</div>
-                        </a>
-                        <audio controls>
-                           <source src="{{song.song.url}}" type="audio/mpeg">
-                           Your browser does not support the audio tag.
-                        </audio>
-                </div>
-                {% endfor %}
-        </div>
+                <audio controls>
+                    <source src="{{song.song.url}}" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                </audio>
+            </div>
+        {% endfor %}
+      </div>
+
+            </section>
+
+</main>
 {% else %}
 <h1>No songs found with this search keyword - {{search_query}} </h1>
 {% endif %}
