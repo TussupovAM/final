@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+
+{% block title %}Search Results For {{search_query}} {% endblock title %}
+
+
+{% block content %}
+
+        {% if search_result %}
+        <div class="container mt-3">
+                <div class="search-header">
+                        <br>
+                        <h3 style="text-align: center;" >Search Results For {{search_query}}</h3>
+                        <br>
+                </div>
+                {% for song in search_result %}
+                <div class="category-card">
+                        <a style="text-decoration: none; color: white;" href="/music/{{track.id}}">
+                           <img src="{{song.songThumbnail.url}}" class="img-fluid rounded-start" alt="{{song.songName}}">
+                           <div class="category-title">{{song.songName}}</div>
+                        </a>
+                        <audio controls>
+                           <source src="{{song.song.url}}" type="audio/mpeg">
+                           Your browser does not support the audio tag.
+                        </audio>
+                </div>
+                {% endfor %}
+        </div>
+{% else %}
+<h1>No songs found with this search keyword - {{search_query}} </h1>
+{% endif %}
+
+{% endblock content %}
+
